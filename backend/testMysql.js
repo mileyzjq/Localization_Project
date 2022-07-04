@@ -18,41 +18,23 @@ async function connectDB() {
     });
 }
 
-async function executeQuery(sql, msg) {
+connectDB();
+
+let promisedQuery = function (queryString, parameters, resultTransformer) {
     return new Promise(function (resolve, reject) {
-        con.query(sql, function (err, result) {
+        con.query(queryString, parameters, function (err, result) {
             if (err) {
-                console.log(err.message);
-                reject(err.message);
+                reject(err);
             } else {
-                if(msg) console.log(msg);
-                if (result) {
+                if (resultTransformer) {
+                    resolve(resultTransformer(result));
+                } else {
                     resolve(result);
                 }
             }
-        });
-    });
-}
-
-async function createTable() {
-    const sql = "CREATE TABLE `testDB` (`id` INT NOT NULL AUTO_INCREMENT, `key` VARCHAR(45) NULL,`name` VARCHAR(45) NULL, PRIMARY KEY (`id`));";
-    //const sql = "CREATE TABLE testDB (sid INT NOT NULL AUTO_INCREMENT, key VARCHAR(255), value VARCHAR(255), PRIMARY KEY (sid));";
-    const msg = "CREATE A TABLE SUCCESSFULLY!";
-    executeQuery(sql, msg);
-}
-
-
-//createTable();
-
-async function insertRows() {
-    const rows  = "('FRED', 'Fred'), ('JOHN', 'John'), ('MICHEAL', 'Michael'), ('SMITH', 'Smith'), ('APPLE', 'apple')," +
-        "('MELON', 'melon'), ('BANANA', 'banana'), ('PEAR', 'pear'), ('TIME', 'time'), ('PLACE', 'place')";
-    const sql = "INSERT INTO `testDB`  (`key`, `name`) VALUES " + rows;
-    const msg = "INSERT ROWS SUCCESSFULLY!";
-    executeQuery(sql, msg);
-}
-
-//insertRows();
+        })
+    })
+};
 
 const checkTable = async() => {
     const sql = "SELECT * FROM `testDB`";
@@ -63,5 +45,5 @@ const checkTable = async() => {
 module.exports = {
     "connectDB": connectDB,
     "checkTable": checkTable,
-    "executeQuery": executeQuery
+    "promisedQuery": promisedQuery
 };

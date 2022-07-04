@@ -1,0 +1,27 @@
+{
+  "name": "Localization_Project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "engines": {
+    "node": "18.0.0"
+  },
+  "scripts": {
+    "start": "concurrently \"nodemon backend/app.js\" \"cd my-app && npm start\"",
+    "build": "cd my-app && npm install && npm run build",
+    "dev": "nodemon server"
+  },
+  "proxy": "http://localhost:3090",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.2.2",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
